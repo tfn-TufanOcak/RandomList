@@ -5,7 +5,6 @@ import 'add_list.dart';
 void main() {
   runApp(MyApp());
 }
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -39,10 +38,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selected;
-  var liste = [
-    "a",
-    "asdasdasd",
-  ];
+  var liste = [];
   spaceScreen(){
     if(liste.length==0){
       return Text("Liste Ekle", style:
