@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:random_list/random_page.dart';
 import 'add_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,22 +14,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'RandomList',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         scaffoldBackgroundColor: Colors.grey[500],
       ),
       home: MyHomePage(title: 'RandomList'),
     );
   }
 }
-
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -39,6 +30,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int selected;
   var liste = [];
+  void initState() {
+    super.initState();
+    getCredential();
+  }
   spaceScreen(){
     if(liste.length==0){
       return Text("Liste Ekle", style:
@@ -155,4 +150,25 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+  onChanged() async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      sharedPreferences.setStringList("list", liste);
+      getCredential();
+    });
+  }
+  getCredential() async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {
+      var checkValue = sharedPreferences.getBool("check");
+      if (checkValue != null) {
+        if (checkValue) {
+          liste = sharedPreferences.getStringList("username");
+        }
+      } else {
+        checkValue = false;
+      }
+    });
+  }
+
 }
