@@ -7,6 +7,7 @@ void main() {
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selected;
-  var liste = [];
+  List<String> liste;
+
   void initState() {
+
+    initList();
     super.initState();
-    getCredential();
+
   }
   spaceScreen(){
-    if(liste.length==0){
+    if(liste==null || liste.isEmpty){
       return Text("Liste Ekle", style:
       TextStyle(fontSize: 30, color: Colors.white),);
     }
@@ -60,12 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
               child: spaceScreen(),
             ),
           ),
+
           Center(
             child: Column(
               children: [
+
                 Expanded(
                   child: ListView.builder(
-                      itemCount: liste.length,
+                      itemCount:liste!=null? liste.length : 0,
                       itemBuilder: (
                         BuildContext contex,
                         int index,
@@ -111,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          AddList(list: liste))).then(onGoBack);
+                                          AddList(list: liste, onChanged: onChanged,))).then(onGoBack);
                             },
                           ),
                         ),
@@ -134,8 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Icon(Icons.delete),
                           backgroundColor: Colors.grey[600],
                           onPressed: () {
+
                             setState(() {
                               liste.removeAt(selected);
+                              onChanged(liste);
                             });
                           },
                         ),
@@ -150,23 +158,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  onChanged() async {
+  onChanged(List<String> liste) async {
+
     var sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      sharedPreferences.setStringList("list", liste);
-      getCredential();
-    });
+    sharedPreferences.setStringList("liste", liste);
+    print(sharedPreferences);
+
   }
-  getCredential() async {
+
+  void initList() async {
     var sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      var checkValue = sharedPreferences.getBool("check");
-      if (checkValue != null) {
-        if (checkValue) {
-          liste = sharedPreferences.getStringList("username");
-        }
-      } else {
-        checkValue = false;
+      liste = sharedPreferences.getStringList("liste");
+      if(liste == null){
+        liste = [];
       }
     });
   }

@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class AddList extends StatefulWidget {
-  var list;
-  AddList({this.list});
+  List<String> list;
+  Function onChanged;
+  AddList({this.list, this.onChanged });
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return AddListState(list: list);
+    return AddListState(list: list, onChanged: onChanged);
   }
 }
 
 class AddListState extends State {
-  var list;
-  AddListState({this.list});
+  List<String> list;
+  Function onChanged;
+
+  AddListState({this.list, this.onChanged});
   String newList;
   var formKey = GlobalKey<FormState>();
   @override
@@ -57,6 +60,8 @@ class AddListState extends State {
                 print(newList);
                 setState(() {
                   list.add(newList);
+                  this.onChanged(list);
+
                 });
                 print(list);
                 Navigator.pop(context,
