@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
+import 'Meal.dart';
+
 // ignore: must_be_immutable
 class AddList extends StatefulWidget {
-  List<String> list;
+
   Function onChanged;
-  AddList({this.list, this.onChanged });
+  AddList({this.onChanged });
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return AddListState(list: list, onChanged: onChanged);
+    return AddListState(onChanged: onChanged);
   }
 }
 
 class AddListState extends State {
-  List<String> list;
   Function onChanged;
 
-  AddListState({this.list, this.onChanged});
-  String newList;
+  AddListState({this.onChanged});
+  String mealName;
   var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class AddListState extends State {
                   keyboardType: TextInputType.text,
                   autofocus: true,
                   onSaved: (String value) {
-                    newList = value;
+                    mealName = value;
                   },
                   decoration: const InputDecoration(
                     hintText: "Yeni Ekle",
@@ -57,13 +57,13 @@ class AddListState extends State {
               backgroundColor: Colors.grey[600],
               onPressed: () {
                 formKey.currentState.save();
-                print(newList);
+
                 setState(() {
-                  list.add(newList);
-                  this.onChanged(list);
+
+                  this.onChanged(mealName, true);
 
                 });
-                print(list);
+
                 Navigator.pop(context,
                     MaterialPageRoute(builder: (context) => AddList()));
               },

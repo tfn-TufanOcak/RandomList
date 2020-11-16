@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:dart_random_choice/dart_random_choice.dart';
 
+import 'Meal.dart';
+
 // ignore: must_be_immutable
 class Random extends StatefulWidget {
   var list;
   Random({this.list});
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return RandomState(list: list);
   }
 }
@@ -24,7 +25,6 @@ class RandomState extends State {
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.grey[500],
       appBar: AppBar(
@@ -65,8 +65,8 @@ class RandomState extends State {
                       backgroundColor: Colors.grey[600],
                       onPressed: () {
                         setState(() {
-                          var choose = randomChoice(list);
-                          selected=choose;
+
+                          selected = randomChoice<Meal>(list).mealName;
                         });
 
                       },

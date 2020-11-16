@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:random_list/globals.dart';
 import 'package:random_list/login.dart';
 import 'package:random_list/random_page.dart';
+import 'Meal.dart';
 import 'add_list.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
@@ -35,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selected;
-  List<String> liste;
+  List<Meal> liste;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   void initState() {
     if (_auth.currentUser == null) {
@@ -44,8 +45,6 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushAndRemoveUntil(context,
             MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
       });
-    } else {
-      initList();
     }
     super.initState();
 
@@ -84,124 +83,120 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 70),
-            child: Center(
-              child: spaceScreen(),
-            ),
-          ),
-
-          Center(
-            child: Column(
-              children: [
-
-                Expanded(
-                  child: ListView.builder(
-                      itemCount:liste!=null? liste.length : 0,
-                      itemBuilder: (
-                        BuildContext contex,
-                        int index,
-                      ) {
-                        return Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: ListTile(
-                            tileColor: Colors.grey[700],
-                            selectedTileColor: Colors.grey[850],
-                            selected: index == selected,
-                            onTap: () {
-                              setState(() {
-                                selected = index;
-                              });
-                            },
-                            title: Text(
-                              liste[index],
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 30, color: Colors.white),
-                            ),
-                          ),
-                        );
-                      }),
+      body:  StreamBuilder<List<Meal>>(
+        stream: Global.mealRef.mealStream,
+        builder: (context, snapshot) {
+         liste = snapshot.data;
+          return Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 70),
+                child: Center(
+                  child: spaceScreen(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    color: Colors.grey[850],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                          child: FloatingActionButton(
-                            heroTag: null,
-                            tooltip: 'Yeni Ekle',
-                            child: Icon(Icons.add),
-                            backgroundColor: Colors.grey[600],
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          AddList(list: liste, onChanged: onChanged,))).then(onGoBack);
-                            },
-                          ),
-                        ),
-                        FloatingActionButton(
-                          heroTag: null,
-                          tooltip: 'Zarla',
-                          child: Icon(Icons.auto_awesome),
-                          backgroundColor: Colors.grey[600],
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        Random(list: liste))).then(onGoBack);
-                          },
-                        ),
-                        FloatingActionButton(
-                          heroTag: null,
-                          tooltip: 'Sil',
-                          child: Icon(Icons.delete),
-                          backgroundColor: Colors.grey[600],
-                          onPressed: () {
+              ),
 
-                            setState(() {
-                              liste.removeAt(selected);
-                              onChanged(liste);
-                            });
-                          },
-                        ),
-                      ],
+              Center(
+                child: Column(
+                  children: [
+
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount:liste!=null? liste.length : 0,
+                          itemBuilder: (
+                            BuildContext contex,
+                            int index,
+                          ) {
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ListTile(
+                                tileColor: Colors.grey[700],
+                                selectedTileColor: Colors.grey[850],
+                                selected: index == selected,
+                                onTap: () {
+                                  setState(() {
+                                    selected = index;
+                                  });
+                                },
+                                title: Text(
+                                  liste[index].mealName,
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      TextStyle(fontSize: 30, color: Colors.white),
+                                ),
+                              ),
+                            );
+                          }),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        color: Colors.grey[850],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                              child: FloatingActionButton(
+                                heroTag: null,
+                                tooltip: 'Yeni Ekle',
+                                child: Icon(Icons.add),
+                                backgroundColor: Colors.grey[600],
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AddList(onChanged: onChanged))).then(onGoBack);
+                                },
+                              ),
+                            ),
+                            FloatingActionButton(
+                              heroTag: null,
+                              tooltip: 'Zarla',
+                              child: Icon(Icons.auto_awesome),
+                              backgroundColor: Colors.grey[600],
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Random(list: liste))).then(onGoBack);
+                              },
+                            ),
+                            FloatingActionButton(
+                              heroTag: null,
+                              tooltip: 'Sil',
+                              child: Icon(Icons.delete),
+                              backgroundColor: Colors.grey[600],
+                              onPressed: () {
+
+                                setState(() {
+                                   onChanged(liste[selected].mealName, false);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            ],
+          );
+        }
       ),
     );
   }
-  onChanged(List<String> liste) async {
-
-    var sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setStringList("liste", liste);
-    print(sharedPreferences);
-
-  }
-
-  void initList() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-    setState(() {
-      liste = sharedPreferences.getStringList("liste");
-      if(liste == null){
-        liste = [];
-      }
-    });
-  }
+  onChanged(String mealName, bool isAdd) async {
+    Meal meal = new Meal(mealName: mealName);
+    if(isAdd){
+      Global.mealRef.updateMealDataWithMap(meal.toMap());
+    }else{
+      Global.mealRef.delete(mealName);
+    }
+   }
 
 }
