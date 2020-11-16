@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:random_list/login.dart';
 import 'package:random_list/random_page.dart';
 import 'add_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
@@ -31,10 +36,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int selected;
   List<String> liste;
-
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   void initState() {
-
-    initList();
+    if (_auth.currentUser == null) {
+      // user not logged ==> Login Screen
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (_) => LoginScreen()), (route) => false);
+      });
+    } else {
+      initList();
+    }
     super.initState();
 
   }
@@ -49,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
