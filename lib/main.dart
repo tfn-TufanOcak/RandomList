@@ -65,6 +65,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+
+          FlatButton.icon(
+              icon: Icon(
+                Icons.exit_to_app,
+                color: Colors.white,
+                size: 27,
+              ),
+              label: Text(""),
+              onPressed:  () async {
+                await _auth.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/', (route) => false);
+              })
+        ],
         backgroundColor: Colors.grey[850],
         title: Text(widget.title),
         centerTitle: true,
