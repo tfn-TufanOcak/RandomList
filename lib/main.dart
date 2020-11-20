@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:random_list/globals.dart';
 import 'package:random_list/login.dart';
@@ -116,6 +117,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onTap: () {
                                   setState(() {
                                     selected = index;
+
+                                    showCupertinoModalPopup(
+                                      context: context,
+                                      builder: (BuildContext context) => CupertinoActionSheet(
+                                        title: const Text('Recipe'),
+                                          actions: <Widget>[
+                                          CupertinoActionSheetAction(
+                                            child: Text(liste[selected].recipe),
+                                            onPressed: () {
+                                              Navigator.pop(null);
+                                            },
+                                          )
+
+                                        ],
+                                      ),
+                                    );
+
                                   });
                                 },
                                 title: Text(
