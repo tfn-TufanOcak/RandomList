@@ -16,7 +16,7 @@ class Random extends StatefulWidget {
 class RandomState extends State {
   var list;
   RandomState({this.list});
-  String selected=" ";
+  Meal selected = new Meal(recipe: "", mealName: "");
   spaceScreen(){
     if(list.length==0){
       return Text("Liste Ekle", style:
@@ -43,13 +43,27 @@ class RandomState extends State {
                       shape: BoxShape.circle,
                       color: Colors.grey[700],
                     ),
-                    height: 250,
-                    width: 250,
-                    child: Center(
-                      child: Text(
-                        selected.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 35, color: Colors.white),
+                    height: 270,
+                    width: 270,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 54),
+                      child: Center(
+                        child: Column(
+                          children: [ Text(
+                            selected == null ? '': selected.mealName,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 35, color: Colors.white),
+                          ),
+                            SizedBox(height: 36,),
+                            Text(
+                              selected == null ? '': selected.recipe,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 35, color: Colors.white),
+                            ),
+
+                          ]
+
+                        ),
                       ),
                     ),
                   ),
@@ -66,7 +80,7 @@ class RandomState extends State {
                       onPressed: () {
                         setState(() {
 
-                          selected = randomChoice<Meal>(list).mealName;
+                          selected = randomChoice<Meal>(list);
                         });
 
                       },
