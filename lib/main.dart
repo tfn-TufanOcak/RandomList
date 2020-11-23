@@ -136,11 +136,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                   });
                                 },
-                                title: Text(
-                                  liste[index].mealName,
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      TextStyle(fontSize: 30, color: Colors.white),
+                                title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                                  children: [
+                                    Text(
+                                      liste[index].mealName,
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          TextStyle(fontSize: 30, color: Colors.white),
+                                    ),
+                                    FlatButton.icon(
+                                        label: Text(liste[index].vote!=null ? liste[index].vote.toString():  ''),
+                                        icon: Icon(CupertinoIcons.hand_thumbsup),
+                                        onPressed: () {
+                                          Global.mealRef.like(liste[index].mealName);
+                                        })
+                                  ],
                                 ),
                                 leading: ikon(liste[index].vote),
                               ),
@@ -217,8 +229,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Global.mealRef.delete(mealName);
     }
    }
-   Icon ikon(String a){
-    if(a=='like'){
+   Icon ikon(int vote){
+    if(vote!= null && vote > 0){
       return Icon(Icons.check,size: 30,color:Colors.green,);
     }
     else{

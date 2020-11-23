@@ -1,10 +1,8 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 class Meal {
 
   String mealName;
   String recipe;
-  String vote;
+  int vote;
   Meal({this.mealName, this.recipe,this.vote});
 
   Map<String, dynamic> toMap() {
