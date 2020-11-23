@@ -110,38 +110,49 @@ class _MyHomePageState extends State<MyHomePage> {
                           ) {
                             return Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: ListTile(
-                                tileColor: Colors.grey[700],
-                                selectedTileColor: Colors.grey[850],
-                                selected: index == selected,
-                                onTap: () {
-                                  setState(() {
-                                    selected = index;
+                              child: Row(
+                                children: [SizedBox(
+                                  width:300,
+                                  child: ListTile(
+                                    tileColor: Colors.grey[700],
+                                    selectedTileColor: Colors.grey[850],
+                                    selected: index == selected,
+                                    onTap: () {
+                                      setState(() {
+                                        selected = index;
 
-                                    showCupertinoModalPopup(
-                                      context: context,
-                                      builder: (BuildContext context) => CupertinoActionSheet(
-                                        title: const Text('Recipe'),
-                                          actions: <Widget>[
-                                          CupertinoActionSheetAction(
-                                            child: Text(liste[selected].recipe),
-                                            onPressed: () {
-                                              Navigator.pop(null);
-                                            },
-                                          )
+                                        showCupertinoModalPopup(
+                                          context: context,
+                                          builder: (BuildContext context) => CupertinoActionSheet(
+                                            title: const Text('Recipe'),
+                                              actions: <Widget>[
+                                              CupertinoActionSheetAction(
+                                                child: Text(liste[selected].recipe),
+                                                onPressed: () {
+                                                  Navigator.pop(null);
+                                                },
+                                              )
 
-                                        ],
-                                      ),
-                                    );
+                                            ],
+                                          ),
+                                        );
 
-                                  });
-                                },
-                                title: Text(
-                                  liste[index].mealName,
-                                  textAlign: TextAlign.center,
-                                  style:
-                                      TextStyle(fontSize: 30, color: Colors.white),
+                                      });
+                                    },
+                                    title: Text(
+                                      liste[index].mealName,
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          TextStyle(fontSize: 30, color: Colors.white),
+                                    ),
+                                  ),
                                 ),
+                                 IconButton(
+                                     icon: Icon(CupertinoIcons.hand_thumbsup),
+                                     onPressed: () {
+                                         Global.mealRef.like(liste[index].mealName);
+                                     })
+                                ],
                               ),
                             );
                           }),

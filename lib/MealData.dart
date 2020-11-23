@@ -14,7 +14,17 @@ class MealData<T> {
         firestore.collection(collection).doc(mapMeal["mealName"]);
     mealRef.set(mapMeal, SetOptions(merge: true));
   }
-
+  Future<void> likeOrDislike(mealName, value) {
+    DocumentReference mealRef =
+    firestore.collection(collection).doc(mealName);
+    mealRef.set({'vote': FieldValue.increment(value)}, SetOptions(merge: true));
+  }
+  Future<void> like(mealName) {
+     likeOrDislike(mealName, 1);
+  }
+  Future<void> dislike(mealName) {
+    likeOrDislike(mealName, -1);
+  }
   Stream<List<T>> get mealStream  {
 
         Query query = firestore.collection(collection);
