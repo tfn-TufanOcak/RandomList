@@ -117,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onTap: () {
                                   setState(() {
                                     selected = index;
-
                                     showCupertinoModalPopup(
                                       context: context,
                                       builder: (BuildContext context) => CupertinoActionSheet(
@@ -148,9 +147,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     FlatButton.icon(
                                         label: Text(liste[index].vote!=null ? liste[index].vote.toString():  ''),
-                                        icon: Icon(CupertinoIcons.hand_thumbsup),
+                                        icon: liste[index].vote==1 ? iconLike(): iconDislike(),
                                         onPressed: () {
-                                          Global.mealRef.like(liste[index].mealName);
+                                          int control=liste[index].vote;
+                                          if(control==0){
+                                            Global.mealRef.like(liste[index].mealName);
+                                          }
+                                          else if (control==1){
+                                            Global.mealRef.dislike(liste[index].mealName);
+                                          }
+
                                         })
                                   ],
                                 ),
@@ -236,5 +242,11 @@ class _MyHomePageState extends State<MyHomePage> {
     else{
       return Icon(Icons.delete,size:30,color: Colors.red,);
     }
+   }
+   Icon iconLike(){
+    return Icon(CupertinoIcons.hand_thumbsup,color: Colors.green,);
+   }
+   Icon iconDislike(){
+    return Icon(CupertinoIcons.hand_thumbsdown,color:Colors.red,);
    }
 }
