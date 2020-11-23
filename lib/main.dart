@@ -147,12 +147,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     FlatButton.icon(
                                         label: Text(liste[index].vote!=null ? liste[index].vote.toString():  ''),
-                                        icon: liste[index].vote==null || liste[index].vote==0 ? iconLike(): iconDislike(),
+                                        icon: liste[index].vote==1 ? iconLike(): iconDislike(),
                                         onPressed: () {
                                           int control=liste[index].vote;
-                                          if(control==null || control==0){
+                                          if(control==0){
                                             Global.mealRef.like(liste[index].mealName);
-                                          }else if (control>0){
+                                          }
+                                          else if (control==1){
                                             Global.mealRef.dislike(liste[index].mealName);
                                           }
 
@@ -246,6 +247,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Icon(CupertinoIcons.hand_thumbsup,color: Colors.green,);
    }
    Icon iconDislike(){
-    return Icon(CupertinoIcons.hand_thumbsup_fill,color:Colors.green,);
+    return Icon(CupertinoIcons.hand_thumbsdown,color:Colors.red,);
    }
 }
