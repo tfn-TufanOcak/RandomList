@@ -121,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     showCupertinoModalPopup(
                                       context: context,
                                       builder: (BuildContext context) => CupertinoActionSheet(
-                                        title: const Text('Recipe'),
+                                        title: const Text('recipe'),
                                           actions: <Widget>[
                                           CupertinoActionSheetAction(
                                             child: Text(liste[selected].recipe),
@@ -142,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   style:
                                       TextStyle(fontSize: 30, color: Colors.white),
                                 ),
+                                leading: ikon(liste[index].vote),
                               ),
                             );
                           }),
@@ -216,5 +217,12 @@ class _MyHomePageState extends State<MyHomePage> {
       Global.mealRef.delete(mealName);
     }
    }
-
+   Icon ikon(String a){
+    if(a=='like'){
+      return Icon(Icons.check,size: 30,color:Colors.green,);
+    }
+    else{
+      return Icon(Icons.delete,size:30,color: Colors.red,);
+    }
+   }
 }
