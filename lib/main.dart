@@ -123,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         title: const Text('recipe'),
                                           actions: <Widget>[
                                           CupertinoActionSheetAction(
-                                            child: Text(liste[selected].recipe),
+                                            child: Text(liste[selected].recipe!=null? liste[selected].recipe : 'Henüz tarif eklenmemiş'),
                                             onPressed: () {
                                               Navigator.pop(null);
                                             },
